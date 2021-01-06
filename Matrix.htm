@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <title>Lucys Matrix Game</title>
+</head>
+<body>
+    <div id="GameScore" class="GameScore">TEST</div>
+    <div id="inGameStatus" class="inGameStatus">
+        <div id="GameStart">
+            <h1> </h1>
+            <div id="TimeSet" class="TimeSet" contenteditable="true">5:00</div>
+            <div id="gobutton" class="gobutton"><p>GO</p></div>
+        </div>
+        <div id="GameStatus">
+        </div>
+    </div>
+    <div id="openModal" class="modalDialog">
+    <div>
+        <h1 class="ribbon">
+                <strong class="ribbon-content">LUCY'S MATRIX GAME</strong>
+        </h1>
+        <div id="mainmenutopimage">
+        </div>
+        <div id="allthethings">
+                <div id="left"></div>
+                <div id="practice"><p>PRACTICE</p></div>
+                <div id="beattheclock"><p>BEAT THE CLOCK</p></div>
+                <div id="options"><p>OPTIONS</p></div>
+                <div id="credits"><p>CREDITS</p></div>
+                <div id="right"></div>
+                <div id="exit" onclick="location.href='#close';">&nbsp;</div>
+                <div id="circle"></div>
+              </div>
+    </div>
+    </div>
+    <div id="GameScreen" class="GameScreen">  
+        <table id="MatrixTable" class="MatrixTable"></table>
+        <div id="matrixfooter" >
+            <div class="meter">
+                <span id="progress" style="width: 0%"></span>
+                <div id="MenuButton" class="menubutton"><p>Menu</p></div>
+                <div id="StopButton" class="stopbutton"><p>Stop</p></div>
+            </div>
+            
+        </div>
+    </div>
+    
+<!-- here goes our data! -->
+</table>
+</body>
+<script src="codelib.js"></script>
+</html>
