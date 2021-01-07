@@ -4,15 +4,17 @@
 :root {
   --main-bg-color: brown;
   --main-bg-imagename: url("background2.jpg");
+  --main-shufflebutton-imagename: url("button-shuffle.png");
+  --main-stopbutton-imagename: url("button-stop.png");
   --matrix-td-font: brown;
   --matrix-th-font: "shadows into light";
   --matrix-td-color1: 226, 225, 225;
   --matrix-td-color2: 240, 236, 230;
   --matrix-th-color: rgb(104, 6, 88);
-  --matrix-colheader-colour: 104, 6, 88;
-  --matrix-rowheader-colour:104, 6, 88;
-  --matrix-tdCorrect-colour:42, 165, 58;
-  --matrix-tdIncorrect-colour: 219, 132, 132;
+  --matrix-colheader-colour: 75,99,132;
+  --matrix-rowheader-colour:75,99,132;
+  --matrix-tdCorrect-colour:119,221,119;
+  --matrix-tdIncorrect-colour:255,105,97;
   --status-divResult-colour:165, 147, 42;
 }
 
@@ -27,7 +29,7 @@ body {
     background-size: 100% 100%;
     height:1200px;
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     margin-right: 5px;
     margin-left: 5px;
     padding: 50px;
@@ -90,12 +92,12 @@ body {
     width:50px; */
     text-align: center;
     font-size: large;
-    padding: 15px;
+    padding: 5px;
     background-color:rgb(var(--matrix-colheader-colour));
     text-align:center;
     color:white;
     font-family:var(--matrix-th-font);
-    font-size: 22px;
+    font-size: 30px;
     
   }
 
@@ -104,12 +106,12 @@ body {
     width:50px; */
     text-align: center;
     font-size: large;
-    padding: 15px;
+    padding: 5px;
     background-color:rgb(var(--matrix-rowheader-colour));
     text-align:center;  
     color:white;
     font-family:var(--matrix-th-font);
-    font-size: 22px;
+    font-size: 30px;
   }
   
   .editable-cell1{
@@ -117,7 +119,7 @@ body {
     width:50px; */
     border: 1px solid black;
     text-align: center;
-    font-size: large;
+    font-size: 30px;
     padding: 15px;
     font-family: Arial, Helvetica, sans-serif;
     background-color:rgb(var(--matrix-td-color1));
@@ -129,7 +131,7 @@ body {
     width:50px; */
     border: 1px solid black;
     text-align: center;
-    font-size: large;
+    font-size: 30px;
     padding: 15px;
     font-family: Arial, Helvetica, sans-serif;
     background-color:rgb(var(--matrix-td-color2));
@@ -526,33 +528,71 @@ body {
    
    .gobutton:hover {
      
-     
    }
 
+.ButtonGroup
+{
+  left:0; 
+  right: 0; 
+  width:500px;
+  margin-left: auto;
+  margin-right: auto; 
+  margin-top: 0;
+  margin-bottom: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  position: absolute;
+}
+
+.shufflebutton
+{
+  background-image: var(--main-shufflebutton-imagename);
+  background-position: center top;
+  width:200px;
+  height:50px;
+  background-size: 100% 100%;
+  text-align:center;
+  font-size:30px;
+  color:white;
+  font-family:shadows into light;
+  cursor:pointer;
+  margin-left: auto;
+  margin-right: auto;
+  float:left; 
+}
+
+.shufflebutton p
+{
+  margin:0;
+  height:100%;
+}
+
+.shufflebutton:hover {
+  background:#7A0000;
+  color:white;
+  -webkit-transform:rotate(-2deg);
+  transform:rotate(-2deg);
+  
+}
 
 
 .menubutton
 {
   background-image: url("startButton.png");
-  background-position: center top;
-  width: 150px;
+  width:200px;
   height:50px;
-  left: 0; 
-  right: 0; 
-  margin-left: auto; 
-  margin-right: auto; 
-  margin-top: 0;
-  margin-bottom: 0;
+  background-position: center top;
   background-size: 100% 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
   z-index: 10;
   text-align:center;
   font-size:30px;
   color:white;
   font-family:shadows into light;
   cursor:pointer;
+  float:right;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .menubutton p
@@ -595,26 +635,20 @@ body {
 
 .stopbutton
 {
-  background-image: url("stopButton.png");
+  background-image: var(--main-stopbutton-imagename);
+  width:200px;
+  height:50px;
   background-position: center top;
-  width: 150px;
-  height:65px;
-  left: 0; 
-  right: 0; 
-  margin-left: auto; 
-  margin-right: auto; 
-  margin-top: 0;
-  margin-bottom: 0;
   background-size: 100% 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
   z-index: 10;
   text-align:center;
   font-size:30px;
   color:white;
   font-family:shadows into light;
   cursor:pointer;
+  float:right;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .stopbutton p

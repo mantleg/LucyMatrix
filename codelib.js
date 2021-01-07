@@ -1,6 +1,7 @@
 let colIndex=1
 let rowIndex=1
-let matrixRange = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12]
+let matrixRangeX = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12]
+let matrixRangeY = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12]
 let TimerLength=0;
 let FormatCellsInLine=false;
 let GameCancelled=false;
@@ -81,6 +82,9 @@ function Initialize()
     var button_menu= document.getElementById("MenuButton");
     button_menu.onclick = function(event) {ShowMenu()};
 
+    var button_shuffle= document.getElementById("ShuffleButton");
+    button_shuffle.onclick = function(event) {ShuffleMatrix()};
+
     var button_stop= document.getElementById("StopButton");
     button_stop.onclick = function(event) {GameCancelled=true;};
     
@@ -98,11 +102,17 @@ function ShowMenu()
 function ShowGameStart_BeatTheClock()
 {
     location.href='#close';
-    generateMatrixTable(matrixRange,false); 
-    showGameControls(true);
+    FormatCellsInLine=false;
+    generateMatrixTable(matrixRangeX,matrixRangeY,FormatCellsInLine,false); 
+    showGameControls(true,false);
     location.href='#GameScreen';
     ShowStatusControls(false);
     location.href='#inGameStatus';
+}
+
+function ShuffleMatrix()
+{
+    generateMatrixTable(matrixRangeX,matrixRangeY,FormatCellsInLine,true); 
 }
 
 function ShowStatusControls(GameComplete)
@@ -123,6 +133,8 @@ function ShowStatusControls(GameComplete)
         {
             screen_gamestart= document.getElementById("GameStart");
             screen_gamestatus= document.getElementById("GameStatus");
+            button_shuffle= document.getElementById("ShuffleButton");
+            button_shuffle.style.visibility="hidden";
             screen_gamestart.style.visibility="hidden";
             screen_gamestatus.style.visibility="visible";
             break;
@@ -148,13 +160,13 @@ function CalculateGameScore()
                 if (matrixValue==col.innerHTML)
                 {
                     cellsCorrect++;
-                    col.style.backgroundColor='green';
+                    col.style.backgroundColor='rgb(119,221,119)';
                     col.style.color='white';
                 }
                 else
                 {
                     cellsInCorrect++;
-                    col.style.backgroundColor='red';
+                    col.style.backgroundColor='rgb(255,105,97)';
                     col.style.color='white';
                 }
             }
@@ -166,10 +178,8 @@ function CalculateGameScore()
 
 function ShowGameCompleteStatus_BeatTheClock()
 {
-    //location.href='#inGameStatus';
-    //ShowStatusControls(true);
     CalculateGameScore();
-    showGameControls(false);
+    showGameControls(false,true);
     var gameScoreDiv= document.getElementById("GameScore");
     gameScoreDiv.innerHTML="You scored <strong>" + Math.round(GameScore) + "%</strong> with <strong>" + Math.round(TimeLeft) + "</strong> seconds left";
     location.href='#GameScore';
@@ -218,29 +228,39 @@ function StartGame_BeatTheClock()
 function StartGame_PracticeMode()
 {
     location.href='#close';
-    generateMatrixTable(matrixRange,true); 
-    showGameControls(false);
+    FormatCellsInLine=true;
+    generateMatrixTable(matrixRangeX,matrixRangeY,FormatCellsInLine,false); 
+    showGameControls(false,false);
     location.href='#GameScreen';
 }
 
-function showGameControls(BeatTheClockMode)
+function showGameControls(BeatTheClockMode,CompletedGame)
 {
     tableMatrix= document.getElementById("MatrixTable");
     divFooter= document.getElementById("matrixfooter");
     button_menu= document.getElementById("MenuButton");
     button_stop= document.getElementById("StopButton");
+    button_shuffle= document.getElementById("ShuffleButton");
 
     tableMatrix.style.visibility="visible"
     divFooter.style.visibility="visible"
 
     if (BeatTheClockMode){
-        button_menu.style.visibility="hidden";
-        button_stop.style.visibility="visible";
+        button_menu.style.display="none";
+        button_stop.style.display="block";
+        button_shuffle.style.display="block";
     }
     else{
-        button_menu.style.visibility="visible";
-        button_stop.style.visibility="hidden";
-    }    
+        button_menu.style.display="block";
+        button_stop.style.display="none"
+
+        if (CompletedGame){
+            button_shuffle.style.display="none";
+        }
+        else{
+            button_shuffle.style.display="block";
+        }
+    }  
 }
 
 function hideGameControls()
@@ -251,14 +271,47 @@ function hideGameControls()
     divFooter.style.visibility="hidden";
     
 }
+
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+  
+    return array;
+  }
+
+
 //
 // TODO : Set Max length dynamically from matrix range
 //
-function generateMatrixTable(range,formatCellAnswers) 
+function generateMatrixTable(rangeX,rangeY,formatCellAnswers,randomSequence) 
 {
     var table = document.querySelector("table");
 
     FormatCellsInLine=formatCellAnswers;
+
+    if (randomSequence)
+    {
+        shuffle(rangeX);
+        shuffle(rangeY);
+
+    }
+    else
+    {
+        rangeX.sort(function(a, b){return a - b});
+        rangeY.sort(function(a, b){return a - b});
+    }
 
     while(table.hasChildNodes())
     {
@@ -274,7 +327,7 @@ function generateMatrixTable(range,formatCellAnswers)
     row.appendChild(th);
     th.setAttribute('class','row-header')
     
-    for (var key1 of range) 
+    for (var key1 of rangeX) 
     {
         var th = document.createElement("th");
             th.setAttribute('class','col-header')
@@ -283,7 +336,7 @@ function generateMatrixTable(range,formatCellAnswers)
             row.appendChild(th);
     }
 
-    for (var key1 of range) 
+    for (var key1 of rangeY) 
     {
         rowIndex=key1
         var row = thead.insertRow();
@@ -300,7 +353,7 @@ function generateMatrixTable(range,formatCellAnswers)
             {offset=0}
         }
 
-        for (var key2 of range) 
+        for (var key2 of rangeX) 
         {
             colIndex=key2
             var td = document.createElement("td");
@@ -433,12 +486,12 @@ function formatCell(e1)
 
         if (matrixValue==parseInt(newValuePreview))
         {
-            currentCell.style.backgroundColor='green';
+            currentCell.style.backgroundColor='rgb(119,221,119)';
             currentCell.style.color='white';
         }
         else
         {
-            currentCell.style.backgroundColor='red';
+            currentCell.style.backgroundColor='rgb(255,105,97)';
             currentCell.style.color='white';
         }
 
