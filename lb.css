@@ -1,0 +1,232 @@
+@import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light);
+@import url(https://fonts.googleapis.com/css?family=Orbitron);
+
+.center {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  font-family: "Red Hat Display", sans-serif;
+}
+
+.MainRankings
+{
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0px;
+  margin-bottom: auto;
+  width:100%;
+  height:100%;
+}
+
+.HeaderRankings
+{
+  height:2%;
+}
+
+.FooterRankings
+{
+  height:2%;
+}
+
+#exit2
+{
+  right:10%;
+  top:10%;
+}
+
+.top3 {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  
+}
+.top3 .item {
+  box-sizing: border-box;
+  position: relative;
+  background: white;
+  width: 15rem;
+  height: 10rem;
+  text-align: center;
+  margin: 1rem 1rem 2rem;
+  border-radius: 0.5rem;
+  transform-origin: bottom;
+  cursor: pointer;
+  transition: transform 200ms ease-in-out;
+  box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem -1rem rgba(0, 0, 0, 0.3);
+}
+
+.top3 .item .top3_pic {
+  position: absolute;
+  top: -2rem;
+  left: 0.5rem;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  margin-right: 1rem;
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3);
+}
+
+.top3_pic2
+{
+  position: absolute;
+  top: -4rem;
+  left: 12rem;
+  width: 9rem;
+  height: 10rem;
+  background-size: cover;
+  background-position: center;
+  margin-right: 1rem;
+  /* box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3); */
+}
+
+.NoRankings
+{
+  display: none;
+}
+
+.top3 .item .top3_pos 
+{
+  font-weight: 900;
+  font-size: 2.5rem;
+  margin-bottom: 0.4rem;
+  background:#006680;
+  color:orange;
+}
+
+.top3 .item .top3_name {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  font-family:"shadows into light";
+}
+
+.top3 .item .top3_score {
+  opacity: 0.7;
+}
+
+.top3 .item.one {
+  width: 20rem;
+  height: 15rem;
+}
+
+.top3 .item.one .top3_pic {
+  width: 7rem;
+  height: 7rem;
+  left: 0.5rem;
+}
+
+.top3 .item.one .top3_pos {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  padding-top:1rem;
+  height:5rem;
+}
+
+.top3 .item:hover {
+  transform: scale(1.05);
+}
+
+.list {
+  padding-left: 2rem;
+  margin: 0 auto;
+}
+.list .item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  height: 3rem;
+  border-radius: 4rem;
+  margin-bottom: 2rem;
+  transform-origin: left;
+  cursor: pointer;
+  transition: transform 200ms ease-in-out;
+  box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem -1rem rgba(0, 0, 0, 0.3);
+}
+.list .item .list_pos {
+  font-weight: 900;
+  position: absolute;
+  padding-top: 1rem;
+  left: -2.5rem;
+  text-align: center;
+  font-size: 1.25rem;
+  width: 3rem;
+  height:3rem;
+  color:orange;
+  /* background:#006680; */
+  z-index:1;
+}
+
+.list .item .list_pic {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  margin-right: 1rem;
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3);
+  z-index:100;
+}
+
+.list .item .list_name {
+  flex-grow: 2;
+  flex-basis: 10rem;
+  font-size: 1.7rem;
+  font-family:"shadows into light";
+}
+.list .item .list_score {
+  margin-right: 1.5rem;
+  opacity: 0.7;
+}
+/* .list .item .score:after {
+  margin-right: 1rem;
+  content: "points";
+  opacity: 0.5;
+} */
+.list .item:hover {
+  transform: scale(1.05);
+}
+.list .item:hover .pos {
+  opacity: 0.8;
+}
+
+.ClearRankings {
+  height:60px;
+  width:60px;
+  background:#006680;
+  border: 1px solid white;
+  border-radius:50px;
+  position:Absolute;
+  top:90px;
+  z-index:50;
+  left:180px;
+  -webkit-transition:0.5s;
+  transition:0.5s;
+  cursor:pointer;
+  background-image: url('trash.png');
+}
+
+.NoRankings {
+  display:block;
+  height:300px;
+  width:700px;
+  background:black;
+  opacity: 0.5;
+  z-index:70;
+  text-align: center;
+  color:whitesmoke;
+  font-size: 2rem;
+  font-family:"shadows into light";
+  margin-top:0;
+  top:100px;
+  padding-top: 1.5rem;
+}
+
+.NoRankings.h1
+{
+  font-size: 3rem;
+}

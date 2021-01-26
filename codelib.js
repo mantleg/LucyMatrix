@@ -5,9 +5,18 @@ let matrixRangeY = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12]
 let TimerLength=0;
 let FormatCellsInLine=false;
 let GameCancelled=false;
-let GameScore=0;
-let TimeLeft=0;
-
+let GameScorePercent=0;
+let TimeTaken=0;
+let RankingList=[];
+let MaxRankings=10;
+let LocalStorageKey_Rankings="Rankings_1_1";
+let LocalStorageKey_LastScore="LastScore_1_1";
+let LocalStorageKey_LastRankedScore="LastScore_1_1";
+let LocalStorageKey_WinningStreak="WinningStreakCount_1_1";
+let cellsCorrect=0;
+let cellsInCorrect=0;
+let RankedScore=false;
+let RankingItem;
 
 settings = {
     maxLen: 3, 
@@ -71,6 +80,8 @@ Initialize();
 
 function Initialize()
 {
+    LoadRankingsData(LocalStorageKey_Rankings);
+
     hideGameControls();
 
     var menu_practice = document.getElementById("practice")
@@ -79,8 +90,11 @@ function Initialize()
     var menu_beattheclock = document.getElementById("beattheclock")
     menu_beattheclock.onclick = function(event) {ShowGameStart_BeatTheClock()};
 
+    var menu_rankings = document.getElementById("rankings")
+    menu_rankings.onclick = function(event) {ShowGameRankings()};
+
     var button_menu= document.getElementById("MenuButton");
-    button_menu.onclick = function(event) {ShowMenu()};
+    button_menu.onclick = function(event) {ClearScreenAndShowMenu()};
 
     var button_shuffle= document.getElementById("ShuffleButton");
     button_shuffle.onclick = function(event) {ShuffleMatrix()};
@@ -91,13 +105,113 @@ function Initialize()
     var button_Go= document.getElementById("gobutton");
     button_Go.onclick = function(event) {StartGame_BeatTheClock()};
     
-    location.href='#openModal';
+    location.href='#modalMainMenu';
 }
 
 function ShowMenu()
 {
-    location.href='#openModal';
+    location.href='#modalMainMenu';
 }
+
+function ClearScreenAndShowMenu()
+{
+    location.href='#close';
+    hideGameControls();
+    ShowMenu();
+}
+
+function LoadRankingsData(localStorageKey)
+{
+    
+    var retrievedObject = localStorage.getItem(localStorageKey);
+    if (retrievedObject===null)
+    {
+        return false;
+    }
+    RankingList= JSON.parse(retrievedObject);
+    return true;
+}
+
+
+function SaveRankingsData(localStorageKey)
+{
+    localStorage.setItem(localStorageKey, JSON.stringify(RankingList));
+}
+
+
+function ClearRankingsData(localStorageKey)
+{
+    localStorage.removeItem(localStorageKey);    
+    RankingList =[];
+}
+
+ 
+function AddScoreToRankingList(RankingItem)
+{
+    RankingList.push(RankingItem);
+}
+
+function isRankedScore(RankingItem)
+{
+    // if we don't have a full ranking list then
+    // just add without checking.
+
+    if (RankingList.length<MaxRankings)
+    {
+        return true;
+    }
+
+    // sort the Ranked List 
+    RankingList.sort(compare);
+
+    // iterate through list and see if this score is higher than any of the scores
+    for (var i = 0; i < RankingList.length; i++) 
+    {
+    
+        var RankingItemScore=(RankingItem.Score/(RankingItem.MaxScore))*100;
+        var RankingListItemScore=(RankingList[i].Score/(RankingList[i].MaxScore))*100;
+
+        if (RankingItemScore>RankingListItemScore)
+        {
+            return true;
+        }
+    }
+
+    // return false if not
+    return false;
+
+}
+
+function ProcessWinningStreak()
+{
+    var LastScore = localStorage.getItem(LocalStorageKey_LastScore);
+    var WinningStreak=localStorage.getItem(LocalStorageKey_WinningStreak);
+
+    if (WinningStreak==null){WinningStreak=0};
+
+    if (LastScore!=null)
+    {
+
+        if (LastScore.Score<RankingItem.Score)
+        {
+            // Increment the winning streak
+            WinningStreak++;
+        }
+        else
+        {
+            WinningStreak=0;
+        }
+    }
+
+    if (RankedScore)
+    {
+        localStorage.setItem(LocalStorageKey_LastRankedScore,JSON.stringify(RankingItem));
+    }
+
+    localStorage.setItem(LocalStorageKey_LastScore,JSON.stringify(RankingItem));
+    localStorage.setItem(LocalStorageKey_WinningStreak,WinningStreak);
+}
+
 
 function ShowGameStart_BeatTheClock()
 {
@@ -107,7 +221,16 @@ function ShowGameStart_BeatTheClock()
     showGameControls(true,false);
     location.href='#GameScreen';
     ShowStatusControls(false);
-    location.href='#inGameStatus';
+    location.href='#modalGameMenu';
+}
+
+function ShowGameRankings()
+{
+    location.href='#close';
+    
+    UpdateRankingUI();
+
+    location.href='#modalRakings';
 }
 
 function ShuffleMatrix()
@@ -115,17 +238,40 @@ function ShuffleMatrix()
     generateMatrixTable(matrixRangeX,matrixRangeY,FormatCellsInLine,true); 
 }
 
-function ShowStatusControls(GameComplete)
+
+function FormatTimeTaken(duration)
 {
-    switch (GameComplete)
+    // Hours, minutes and seconds
+    var hrs = ~~(duration / 3600);
+    var mins = ~~((duration % 3600) / 60);
+    var secs = ~~duration % 60;
+
+    // Output like "1:01" or "4:03:59" or "123:03:59"
+    var ret = "";
+
+    if (hrs > 0) {
+        ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+    }
+
+    if (mins > 0) {
+        ret += "" + mins + " mins. " + (secs < 10 ? "0" : "");
+    }
+
+    ret += "" + secs + " sec.";
+    return ret;
+
+}
+
+function ShowStatusControls(GameStatus)
+{
+    switch (GameStatus)
     {
         case false:
         {
             screen_gamestart= document.getElementById("GameStart");
             screen_gamestatus= document.getElementById("GameStatus");
-            screen_gamestart.style.visibility="visible";
-            screen_gamestatus.style.visibility="hidden";
-
+            screen_gamestart.style.display="block";
+            screen_gamestatus.style.display="none";
             break;
         }
 
@@ -134,19 +280,17 @@ function ShowStatusControls(GameComplete)
             screen_gamestart= document.getElementById("GameStart");
             screen_gamestatus= document.getElementById("GameStatus");
             button_shuffle= document.getElementById("ShuffleButton");
-            button_shuffle.style.visibility="hidden";
-            screen_gamestart.style.visibility="hidden";
-            screen_gamestatus.style.visibility="visible";
+            screen_gamestart.style.display="none";
+            screen_gamestatus.style.display="block";
+            button_shuffle.style.display="none";
             break;
         }
     }
 }
 
-function CalculateGameScore()
+function CalculateGameScorePercent()
 {
     var table = document.getElementById("MatrixTable");
-    var cellsCorrect=0;
-    var cellsInCorrect=0;
     
     for (var i = 0, row; row = table.rows[i]; i++) {
         //iterate through rows
@@ -173,24 +317,210 @@ function CalculateGameScore()
         }  
     }
 
-    GameScore=(cellsCorrect/(cellsCorrect+cellsInCorrect))*100;
+    GameScorePercent=(cellsCorrect/(cellsCorrect+cellsInCorrect))*100;
 }
 
-function ShowGameCompleteStatus_BeatTheClock()
-{
-    CalculateGameScore();
-    showGameControls(false,true);
-    var gameScoreDiv= document.getElementById("GameScore");
-    gameScoreDiv.innerHTML="You scored <strong>" + Math.round(GameScore) + "%</strong> with <strong>" + Math.round(TimeLeft) + "</strong> seconds left";
-    location.href='#GameScore';
+
+function GetRankingItem()
+{  
+    // create the Ranking Object
+    var RankingItem = new Object();1
+    RankingItem.forename= "lucy";
+    RankingItem.surname="mantle";
+    RankingItem.scoreDate=new Date();
+    RankingItem.MaxScore=cellsCorrect+cellsInCorrect;
+    RankingItem.Score=cellsCorrect;
+    RankingItem.TimeTaken=TimeTaken;
+    return RankingItem;
 }
+
+function roundedToFixed(_float, _digits){
+    var rounded = Math.pow(10, _digits);
+    return (Math.round(_float * rounded) / rounded).toFixed(_digits);
+  }
+
+function ClearRankings()
+{
+    ClearRankingsData(LocalStorageKey_Rankings);
+    UpdateRankingUI();
+}
+
+function UpdateRankingUI()
+{
+    var _leaderBoardItemCount;
+    var _divNoRankings = document.getElementById("NoRankings");
+    var LastRankedItem=null;
+
+    var retrievedObject = localStorage.getItem(LocalStorageKey_LastRankedScore);
+    if (retrievedObject!==null)
+    {
+        LastRankedItem=JSON.parse(retrievedObject);
+    }
+
+    // Re-Load the ranking data to ensure all objects are ]
+    // formatted correctly
+    LoadRankingsData(LocalStorageKey_Rankings);
+    
+    // // hide all of the ranking items in the list
+    // // we'll show item as we set them
+    for (var i = 0; i < MaxRankings; i++) 
+    {
+        var _divRankingItem = document.getElementById("RankItem" + (i+1));
+
+        if (_divRankingItem!=null)
+        {
+            _divRankingItem.style.display="none";
+            _divNoRankings.style.display="none";
+        }
+    }
+
+    if (RankingList.length==0)
+    {
+        // no rankings yet. show no rankings message
+        _divNoRankings.style.display="block";
+        return;
+    }
+
+    if (RankingList.length<MaxRankings)
+    {
+        _leaderBoardItemCount=RankingList.length
+    }
+    else
+    {
+        _leaderBoardItemCount=MaxRankings
+    }
+
+    // sort the object array by score and time
+    RankingList.sort(compare);
+
+    // loop through sorted array and update UI
+    for (var i = 0; i < _leaderBoardItemCount; i++) 
+    {
+        // Get the Div Item related to this entry
+        var _divRankingItem = document.getElementById("RankItem" + (i+1));
+
+        if (_divRankingItem!=null)
+        {
+            // get and set the values for item UI
+            var _divRankingItem_name = document.getElementById("item" + (i+1) + "_name");
+            var _divRankingItem_score = document.getElementById("item" + (i+1) + "_score");
+    
+            _divRankingItem_name.innerHTML=RankingList[i].forename + " " + RankingList[i].surname;
+            _divRankingItem_score.innerHTML=roundedToFixed((RankingList[i].Score/RankingList[i].MaxScore)*100,1) + "% in " + FormatTimeTaken(RankingList[i].TimeTaken);
+
+            // if this is the last ranked item set the back colour to highight
+            if (LastRankedItem!=null)
+            {
+                if (RankingList[i].scoreDate==LastRankedItem.scoreDate)
+                {
+                    _divRankingItem.style.backgroundColor="yellow";
+                }
+                else
+                {
+                    _divRankingItem.style.backgroundColor="white";
+                }
+            }
+
+            // show the div
+            if (i<3)
+            {
+                _divRankingItem.style.display="block";
+            }
+            else
+            {
+                _divRankingItem.style.display="flex";
+            }
+        }
+    }
+
+}
+
+function compare( a, b ) 
+{
+    var _aPercent=(a.Score/(a.MaxScore))*100;
+    var _bPercent=(b.Score/(b.MaxScore))*100;
+    var a_TimeTaken=a.TimeTaken;
+    var b_TimeTaken=b.TimeTaken;
+    
+    if ( _aPercent > _bPercent){
+      return -1;
+    }
+    if ( _aPercent < _bPercent){
+      return 1;
+    }
+    return 0;
+  }
+
+function RemoveLastRankingScore()
+{
+    RankingList.pop();
+}
+
+function ProcessRankings()
+{
+    RankingItem=GetRankingItem();
+
+    if (isRankedScore(RankingItem)==true)
+    {
+        if (RankingList.length>MaxRankings)
+        {
+            // if we have a a full set of rankings then
+            // remove the last entry.
+            RemoveLastRankingScore();
+        }
+        
+        AddScoreToRankingList(RankingItem);
+        RankedScore=true;
+    }
+    else
+    {
+        RankedScore=false;
+    }
+}
+
+function ShowGameStatusStatus_BeatTheClock()
+{
+    CalculateGameScorePercent();
+    ProcessRankings();
+    ProcessWinningStreak();
+    SaveRankingsData(LocalStorageKey_Rankings);
+    UpdateGameCompleteUI();
+    showGameControls(false,true);
+    ShowStatusControls(true);
+    location.href='#modalGameMenu';
+}
+
+function UpdateGameCompleteUI()
+{
+    var GameScorePercentDiv= document.getElementById("GameComplete_Score");
+    var GameCompleteRankingSubHeader=document.getElementById("GameComplete_SubHeader2");
+    var GameCompleteTipsSubHeader=document.getElementById("GameComplete_SubHeader3");
+    var GameCompletedHeader=document.getElementById("GameComplete_Header");
+
+    GameScorePercentDiv.innerHTML="You scored <strong>" + roundedToFixed(GameScorePercent,1) + " %</strong> in <strong>" + FormatTimeTaken(TimeTaken) + "</strong>";
+    GameCompleteTipsSubHeader.innerHTML="";
+
+
+    if (RankedScore)
+    {
+        GameCompletedHeader.innerHTML="NICE JOB. YOU RANKED!!&nbsp;&nbsp;&nbsp;";  
+        GameCompleteRankingSubHeader.innerHTML= "Check the leaderboard to see where you placed.";  
+    }
+    else
+    {
+        GameCompleteRankingSubHeader.innerHTML="Unlucky. You didnt get on the leaderboard this time...";  
+    }
+}
+
 
 function StartGame_BeatTheClock()
 {
+    var div_Timer= document.getElementById("TimeSet");
+    TimerLengthText=div_Timer.innerHTML;
+    TimerLength=(parseFloat(TimerLengthText.replace(':','.'))*60);
+    
     location.href='#close'; 
     GameCancelled=false;
-
-    TimerLength=300;
 
     // Set the date we're counting down to
     var countDownDate = new Date();
@@ -218,8 +548,8 @@ function StartGame_BeatTheClock()
         // If the count down is finished, write some text
         if (distanceSecs< 0 || GameCancelled) {
             clearInterval(x);
-            TimeLeft=distanceSecs;
-            ShowGameCompleteStatus_BeatTheClock();
+            TimeTaken=TimerLength-distanceSecs;
+            ShowGameStatusStatus_BeatTheClock();
         }
         }, 1000);
     
@@ -248,11 +578,13 @@ function showGameControls(BeatTheClockMode,CompletedGame)
     if (BeatTheClockMode){
         button_menu.style.display="none";
         button_stop.style.display="block";
+        button_stop.style.float="right";
         button_shuffle.style.display="block";
     }
     else{
         button_menu.style.display="block";
-        button_stop.style.display="none"
+        button_stop.style.display="none";
+        button_menu.style.float="none";
 
         if (CompletedGame){
             button_shuffle.style.display="none";
@@ -269,7 +601,6 @@ function hideGameControls()
     divFooter= document.getElementById("matrixfooter");
     tableMatrix.style.visibility="hidden";
     divFooter.style.visibility="hidden";
-    
 }
 
 function shuffle(array) {
@@ -289,7 +620,7 @@ function shuffle(array) {
     }
   
     return array;
-  }
+  } 
 
 
 //

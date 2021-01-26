@@ -2,42 +2,206 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <html lang="en">
 <head> 
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="lb.css">
     <title>Lucys Matrix Game</title>
 </head>
 <body>
-    <div id="GameScore" class="GameScore">TEST</div>
-    <div id="inGameStatus" class="inGameStatus">
+    <div id="modalGameMenu" class="modalGameMenu">
         <div id="GameStart">
-            <h1> </h1>
+            <h1 class="ribbon">
+                <strong id="GameStart_Header" class="ribbon-content">START THE CLOCK</strong>
+            </h1>
             <div id="TimeSet" class="TimeSet" contenteditable="true">5:00</div>
             <div id="gobutton" class="gobutton"><p>GO</p></div>
         </div>
         <div id="GameStatus">
-        </div>
-    </div>
-    <div id="openModal" class="modalDialog">
-    <div>
-        <h1 class="ribbon">
-                <strong class="ribbon-content">LUCY'S MATRIX GAME</strong>
-        </h1>
-        <div id="mainmenutopimage">
-        </div>
-        <div id="allthethings">
-                <div id="left"></div>
-                <div id="practice"><p>PRACTICE</p></div>
-                <div id="beattheclock"><p>BEAT THE CLOCK</p></div>
-                <div id="options"><p>OPTIONS</p></div>
-                <div id="credits"><p>CREDITS</p></div>
-                <div id="right"></div>
-                <div id="exit" onclick="location.href='#close';">&nbsp;</div>
-                <div id="circle"></div>
+            <div class="GameComplete">
+                <h1 class="ribbon">
+                    <strong id="GameComplete_Header" class="ribbon-content">HEADER</strong>
+                </h1>
+                <div class="GameCompleteProfilePic"></div>
+                <div id="GameCompleteImage" class="GameCompleteImage">&nbsp;</div>
+                <h2 id="GameComplete_Score">
+                  You scored <strong>67%</strong> in <strong>5 mins 30 secs</strong>
+                </h2>
+                <h2 id="GameComplete_SubHeader2" >
+                  Check the leaderboard to see where you placed.
+                </h2>
+                <h2  id="GameComplete_SubHeader3">
+                  Tip : Do this next time
+                </h2>
+                <div id="closemodalGameMenu" class="ExitButton" onclick="location.href='#close';">&nbsp;</div>
               </div>
+        </div>
     </div>
+    <div id="modalRakings" class="modalRankings">
+        <div>  
+            <div id="HeaderRankings" class="HeaderRankings">
+                <h1 class="ribbon"><strong class="ribbon-content">RANKINGS</strong></h1>
+                <div id="exit2" class="ExitButton" onclick="ClearScreenAndShowMenu();">&nbsp;</div>
+                <div id="ClearRankings" class="ClearRankings" onclick="ClearRankings();">&nbsp;</div>
+            </div>
+
+            <div id="MainRankings" class="MainRankings">
+                <div class="center">
+                    <div id="NoRankings" class="NoRankings">
+                        <h1>IT'S QUIET IN HERE !!</h1>
+                        <p>START PLATING BEAT THE CLOCK TO GET RANKED</p>
+                    </div>
+                    <div class="top3">
+                        <div class="two item" id="RankItem2">
+                            <div class="top3_pos">
+                            2
+                            </div>
+                            <div id="item2_pic" class="top3_pic" style="background-image: url('lucy.png')"></div>
+                            <div id="item2_name" class="top3_name">
+                            RANK2
+                            </div>
+                            <div id="item2_score" class="top3_score">
+                            100%
+                            </div>
+                        </div>
+                        <div class="one item" id="RankItem1">
+                            <div class="top3_pos">
+                            1
+                            </div>
+                            <div id="item1_pic"  class="top3_pic" style="background-image: url('lucy.png')"></div>
+                            <div id="item1_pic2"  class="top3_pic2" style="background-image: url('trophy_1st.png')"></div>
+                            <div id="item1_name" class="top3_name">
+                            RANK1
+                            </div>
+                            <div id="item1_score" class="top3_score">
+                            100%
+                            </div>
+                        </div>
+                        <div class="three item" id="RankItem3">
+                            <div class="top3_pos">
+                            3
+                            </div>
+                            <div id="item3_pic" class="top3_pic" style="background-image: url('lucy.png')"></div>
+                            <div id="item3_name" class="top3_name">
+                            RANK3
+                            </div>
+                            <div id="item3_score" class="top3_score">
+                            100%
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="list">
+                        <div class="item" id="RankItem4">
+                            <div class="list_pos">
+                            4
+                            </div>
+                            <div id="item4_pic" class="list_pic" style="background-image: url('lucy.png')"></div>
+                            <div id="item4_name" class="list_name">
+                            RANK4
+                            </div>
+                            <div id="item4_score" class="list_score">
+                            100%
+                            </div>
+                        </div>
+                        <div class="item" id="RankItem5">
+                            <div class="list_pos">
+                            5
+                            </div>
+                            <div id="item5_pic" class="list_pic" style="background-image: url('lucy.png')"></div>
+                            <div id="item5_name" class="list_name">
+                            RANK5
+                            </div>
+                            <div id="item5_score" class="list_score">
+                            100%
+                            </div>
+                        </div>
+                        <div class="item" id="RankItem6">
+                            <div class="list_pos">
+                            5
+                            </div>
+                            <div id="item6_pic" class="list_pic" style="background-image: url('lucy.png')"></div>
+                            <div id="item6_name" class="list_name">
+                            RANK6
+                            </div>
+                            <div id="item6_score" class="list_score">
+                            100%
+                            </div>
+                        </div>
+                        <div class="item" id="RankItem7">
+                            <div class="list_pos">
+                            5
+                            </div>
+                            <div id="item7_pic" class="list_pic" style="background-image: url('lucy.png')"></div>
+                            <div id="item7_name" class="list_name">
+                            RANK7
+                            </div>
+                            <div id="item7_score" class="list_score">
+                            100%
+                            </div>
+                        </div>
+                        <div class="item" id="RankItem8">
+                            <div class="list_pos">
+                            5
+                            </div>
+                            <div id="item8_pic" class="list_pic" style="background-image: url('lucy.png')"></div>
+                            <div id="item8_name" class="list_name">
+                            RANK8
+                            </div>
+                            <div id="item8_score" class="list_score">
+                            100%
+                            </div>
+                        </div>
+                        <div class="item" id="RankItem9">
+                            <div class="list_pos">
+                            5
+                            </div>
+                            <div id="item9_pic" class="list_pic" style="background-image: url('lucy.png')"></div>
+                            <div id="item9_name" class="list_name">
+                            RANK9
+                            </div>
+                            <div id="item9_score" class="list_score">
+                            100%
+                            </div>
+                        </div>
+                        <div class="item" id="RankItem10">
+                            <div class="list_pos">
+                            5
+                            </div>
+                            <div id="item10_pic" class="list_pic" style="background-image: url('lucy.png')"></div>
+                            <div id="item10_name" class="list_name">
+                            RANK10
+                            </div>
+                            <div id="item10_score" class="list_score">
+                            100%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div id="modalMainMenu" class="modalMainMenu">
+        <div>
+            <h1 class="ribbon">
+                    <strong class="ribbon-content">LUCY'S MATRIX GAME</strong>
+            </h1>
+            <div id="mainmenutopimage">
+    
+            </div>
+            <div id="mainMenuItems">
+                    <div id="left"></div>
+                    <div id="practice"><p>PRACTICE</p></div>
+                    <div id="beattheclock"><p>BEAT THE CLOCK</p></div>
+                    <div id="rankings"><p>RANKINGS</p></div>
+                    <div id="credits"><p>CREDITS</p></div>
+                    <div id="right"></div>
+                    <div id="exit"  class="ExitButton" onclick="location.href='#close';">&nbsp;</div>
+                    <div id="circle"></div>
+                  </div>
+        </div>
+        </div>
     <div id="GameScreen" class="GameScreen">  
         <table id="MatrixTable" class="MatrixTable"></table>
         <div id="matrixfooter" >
@@ -52,8 +216,6 @@
             
         </div>
     </div>
-    
-<!-- here goes our data! -->
 </table>
 </body>
 <script src="codelib.js"></script>

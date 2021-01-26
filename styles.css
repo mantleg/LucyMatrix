@@ -23,6 +23,7 @@ body {
     
   }
 
+
 .GameScreen {
     background-image: var(--main-bg-imagename);
     background-position: center top;
@@ -42,7 +43,7 @@ body {
   opacity:1;
 }
 
-.inGameStatus {
+.modalRankings{
 	position: fixed;
 	font-family: Arial, Helvetica, sans-serif;
 	top: 0;
@@ -58,15 +59,51 @@ body {
 	pointer-events: none;
 }
 
-.inGameStatus:target {
+.modalRankings:target {
 	opacity:1;
 	pointer-events: auto;
 }
 
-.inGameStatus > div {
+.modalGameMenu {
+	position: fixed;
+	font-family: Arial, Helvetica, sans-serif;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,0.8);
+	z-index: 99999;
+	opacity:0;
+	-webkit-transition: opacity 400ms ease-in;
+	-moz-transition: opacity 400ms ease-in;
+	transition: opacity 400ms ease-in;
+	pointer-events: none;
+}
+
+.modalGameMenu:target {
+	opacity:1;
+	pointer-events: auto;
+}
+
+#GameCompleteImage
+{ 
+  background-image: url("badge-gold.png");
+  background-color: darkgray;
+  border: 3px solid black;
+  background-position: center top;
+  background-size: 100% 100%;
+  width:200px;
+  height:200px;
+  margin-left: auto;
+  margin-right: auto;
+  position:relative;
+  padding:20px,20px,20px,20px;
+}
+
+.modalGameMenu > div {
 	width: 600px;
 	position: relative;
-	margin: 10% auto;
+	margin: 5% auto;
 	padding: 5px 20px 13px 20px;
 	border-radius: 10px;
 	background: #fff;
@@ -119,8 +156,8 @@ body {
     width:50px; */
     border: 1px solid black;
     text-align: center;
-    font-size: 30px;
-    padding: 15px;
+    font-size: 25px;
+    padding: 2px;
     font-family: Arial, Helvetica, sans-serif;
     background-color:rgb(var(--matrix-td-color1));
     
@@ -131,13 +168,13 @@ body {
     width:50px; */
     border: 1px solid black;
     text-align: center;
-    font-size: 30px;
-    padding: 15px;
+    font-size: 25px;
+    padding: 2px;
     font-family: Arial, Helvetica, sans-serif;
     background-color:rgb(var(--matrix-td-color2));
   }
 
-  .modalDialog {
+  .modalMainMenu {
 	position: fixed;
 	font-family: Arial, Helvetica, sans-serif;
 	top: 0;
@@ -153,12 +190,12 @@ body {
 	pointer-events: none;
 }
 
-.modalDialog:target {
+.modalMainMenu:target {
 	opacity:1;
 	pointer-events: auto;
 }
 
-.modalDialog > div {
+.modalMainMenu > div {
 	width: 600px;
 	position: relative;
 	margin: 10% auto;
@@ -191,6 +228,12 @@ body {
 
 .close:hover { background: #00d9ff; }
 
+#closemodalGameMenu
+{
+  right: 2px;
+  top : 2px;
+}
+
 
 #TimeSet{
   margin-left: auto;
@@ -213,7 +256,7 @@ body {
 }
 
 
-#exit {
+.ExitButton {
   height:30px;
   width:30px;
   background:#006680;
@@ -228,7 +271,7 @@ body {
   cursor:pointer;
   
 }
-#exit:after {
+.ExitButton:after {
   content:"";
   display:block;
   height:15px;
@@ -244,7 +287,7 @@ body {
   
 }
 
-#exit:before {
+.ExitButton:before {
   content:"";
   display:block;
   height:10px;
@@ -275,7 +318,7 @@ body {
 }
 
 
-#allthethings {
+#mainMenuItems {
   width:0px;
   height:0px;
   border-left: 300px solid transparent;
@@ -361,7 +404,7 @@ body {
   
 }
 
-#options:hover {
+#rankings:hover {
   background:Gray;
   color:white;
   -webkit-transform:rotate(-2deg);
@@ -395,7 +438,7 @@ body {
   border-top:1px solid white;  
 }
 
-#options {
+#rankings{
   
   height:50px;
   width:400px;
@@ -406,14 +449,13 @@ body {
   font-size:30px;
   text-align:center;
   font-family:shadows into light;
-  background:Gray;
+  color:orange;
    -webkit-transition:0.5s;
   transition:0.5s;
-  cursor:pointer;
-  
+  cursor:pointer;  
 }
 
-#options p {
+#rankings p {
   position:relative;
   top:0px;
   right:4px;
@@ -519,7 +561,7 @@ body {
      cursor:pointer;
    }
    
-   .gobutton p
+   .gobutton pH1
    {
     margin-top: auto;
     margin-bottom: auto;
@@ -573,9 +615,8 @@ body {
   color:white;
   -webkit-transform:rotate(-2deg);
   transform:rotate(-2deg);
-  
-}
 
+}
 
 .menubutton
 {
@@ -609,28 +650,59 @@ body {
   
 }
 
-.GameScore
-{
-  /* background-image: url("stopButton.png");
-  background-position: center top; */
-  width: 500px;
-  height: 50px;
-  top:0;
-  margin-left: auto;
-  margin-right: auto;
-  position: absolute;
-  z-index: 10;
+.GameComplete {
+  /* display: flex; */
+  justify-content: center;
+  /* align-items: flex-end; */
+  color: #4B4168;
   text-align:center;
-  font-size:30px;
-  background-color: yellow;
-  color:black;
-  font-family:shadows into light;
-  opacity:0;
 }
 
-.GameScore:target
+.GameComplete .item {
+  box-sizing: border-box;
+  position: relative;
+  background: white;
+  width:800px;
+  /* width: 9rem;
+  height: 10rem; */
+  text-align: center;
+  /* padding: 2.8rem 0 0;
+  margin: 1rem 1rem 2rem;
+  border-radius: 0.5rem;
+  transform-origin: bottom;
+  cursor: pointer; */
+  transition: transform 200ms ease-in-out;
+  box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem -1rem rgba(0, 0, 0, 0.3);
+}
+
+.GameComplete h1
 {
-    opacity:1;
+  /* font-family:shadows into light;
+  margin-left: 12rem;
+  margin-bottom: 4rem;
+  font-size:40px; */
+  text-align: right;
+}
+
+.GameComplete h2
+{
+  margin-left: 1rem;
+  font-family:shadows into light;
+  font-size:30px;
+}
+
+.GameCompleteProfilePic {
+  position: absolute;
+  top: 2.5rem;
+  /* left: 2.5rem; */
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  background-image: url("lucy.png");
+  background-size: cover;
+  background-position: center;
+  margin-right: 1rem;
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3);
 }
 
 .stopbutton
