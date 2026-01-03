@@ -183,40 +183,48 @@
         </div>
     </div>
     <div id="modalMainMenu" class="modalMainMenu">
-        <div>
-            <h1 class="ribbon">
-                    <strong class="ribbon-content">LUCY'S MATRIX GAME</strong>
-            </h1>
-            <div id="mainmenutopimage">
+        <div class="menu-card">
+            <div class="menu-card__header">
+                <h1 class="ribbon modern-ribbon">
+                        <strong class="ribbon-content">LUCY'S MATRIX GAME</strong>
+                </h1>
+                <div id="exit"  class="ExitButton" onclick="location.href='#close';">&nbsp;</div>
+            </div>
+            <div id="mainmenutopimage" class="menu-hero">
     
             </div>
-            <div id="mainMenuItems">
-                    <div id="left"></div>
-                    <div id="practice"><p>PRACTICE</p></div>
-                    <div id="beattheclock"><p>BEAT THE CLOCK</p></div>
-                    <div id="rankings"><p>RANKINGS</p></div>
-                    <div id="credits"><p>CREDITS</p></div>
-                    <div id="right"></div>
-                    <div id="exit"  class="ExitButton" onclick="location.href='#close';">&nbsp;</div>
-                    <div id="circle"></div>
+            <div id="mainMenuItems" class="menu-grid">
+                    <button id="practice" class="menu-button primary"><span>PRACTICE</span></button>
+                    <button id="beattheclock" class="menu-button primary"><span>BEAT THE CLOCK</span></button>
+                    <button id="rankings" class="menu-button secondary"><span>RANKINGS</span></button>
+                    <button id="credits" class="menu-button ghost"><span>CREDITS</span></button>
                   </div>
         </div>
         </div>
     <div id="GameScreen" class="GameScreen">  
-        <table id="MatrixTable" class="MatrixTable"></table>
-        <div id="matrixfooter" >
-            <div class="meter">
-                <span id="progress" style="width: 0%"></span>
+        <div class="game-panel">
+            <div class="game-panel__header">
+                <div>
+                    <p class="eyebrow">Multiplication trainer</p>
+                    <h2>Matrix workspace</h2>
+                </div>
+                <p class="helper-text">Practice or race the clock with responsive controls.</p>
+            </div>
+            <div class="table-wrapper">
+                <table id="MatrixTable" class="MatrixTable"></table>
+            </div>
+            <div id="matrixfooter" class="matrixfooter" >
+                <div class="meter">
+                    <span id="progress" style="width: 0%"></span>
+                </div>
                 <div id="ButtonGroup" class="ButtonGroup">
-                    <div id="StopButton" class="stopbutton"><p>Stop</p></div>
-                    <div id="MenuButton" class="menubutton"><p>Menu</p></div>
-                    <div id="ShuffleButton" class="shufflebutton"><p>Shuffle</p></div>
+                    <div id="StopButton" class="control-button stopbutton"><p>Stop</p></div>
+                    <div id="MenuButton" class="control-button menubutton"><p>Menu</p></div>
+                    <div id="ShuffleButton" class="control-button shufflebutton"><p>Shuffle</p></div>
                 </div>
             </div>
-            
         </div>
     </div>
-</table>
 </body>
 <script src="codelib.js"></script>
 </html>
