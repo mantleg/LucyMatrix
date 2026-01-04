@@ -1,0 +1,25 @@
+<svg width="128" height="160" viewBox="0 0 128 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bronze trophy">
+  <defs>
+    <linearGradient id="bronzeBody" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d7a46f"/>
+      <stop offset="50%" stop-color="#c07a35"/>
+      <stop offset="100%" stop-color="#8b5a2b"/>
+    </linearGradient>
+    <linearGradient id="bronzeHighlight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f0cfa3" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#c37c3b" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+  <rect x="44" y="120" width="40" height="14" rx="4" fill="#5a3b1f"/>
+  <rect x="32" y="134" width="64" height="16" rx="6" fill="url(#bronzeBody)"/>
+  <path d="M48 40h32v32c0 12-8 22-16 22s-16-10-16-22V40z" fill="url(#bronzeBody)"/>
+  <path d="M48 40h32v12H48z" fill="url(#bronzeHighlight)"/>
+  <path d="M32 36h64v8H32z" fill="#6e431f"/>
+  <rect x="56" y="94" width="16" height="26" rx="6" fill="url(#bronzeBody)"/>
+  <path d="M32 44c0 18 8 30 18 36V48H32z" fill="url(#bronzeBody)"/>
+  <path d="M96 44c0 18-8 30-18 36V48h18z" fill="url(#bronzeBody)"/>
+  <path d="M26 38h22v8H26c-5 0-8-3-8-8v-6h8v6z" fill="#8b5a2b"/>
+  <path d="M102 38H80v8h22c5 0 8-3 8-8v-6h-8v6z" fill="#8b5a2b"/>
+  <circle cx="64" cy="70" r="8" fill="#f2d1a2"/>
+  <path d="M64 60l2.7 6.8 7.3.4-5.8 4.7 2 7-6.2-4.4-6.2 4.4 2-7-5.8-4.7 7.3-.4z" fill="#fff2dc"/>
+</svg>

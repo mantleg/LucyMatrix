@@ -11,8 +11,13 @@ let RankingList=[];
 let MaxRankings=10;
 let LocalStorageKey_Rankings="Rankings_1_1";
 let LocalStorageKey_LastScore="LastScore_1_1";
-let LocalStorageKey_LastRankedScore="LastScore_1_1";
+let LocalStorageKey_LastRankedScore="LastRankedScore_1_1";
 let LocalStorageKey_WinningStreak="WinningStreakCount_1_1";
+let LocalStorageKey_Players="Players_1_0";
+let LocalStorageKey_SelectedPlayer="SelectedPlayer_1_0";
+let Players=[];
+let SelectedPlayer=null;
+let PendingPlayerImage=null;
 let cellsCorrect=0;
 let cellsInCorrect=0;
 let RankedScore=false;
@@ -81,6 +86,7 @@ Initialize();
 function Initialize()
 {
     LoadRankingsData(LocalStorageKey_Rankings);
+    LoadPlayers();
 
     hideGameControls();
 
@@ -93,6 +99,18 @@ function Initialize()
     var menu_rankings = document.getElementById("rankings")
     menu_rankings.onclick = function(event) {ShowGameRankings()};
 
+    var menu_clearRankings = document.getElementById("clearRankings")
+    menu_clearRankings.onclick = function(event) {ClearRankings()};
+
+    var menu_createPlayer = document.getElementById("createPlayer")
+    menu_createPlayer.onclick = function(event) {OpenCreatePlayerModal()};
+
+    var menu_clearPlayers = document.getElementById("clearPlayers")
+    menu_clearPlayers.onclick = function(event) {ClearPlayers()};
+
+    var menu_selectPlayer = document.getElementById("selectPlayer")
+    menu_selectPlayer.onclick = function(event) {OpenSelectPlayerModal()};
+
     var button_menu= document.getElementById("MenuButton");
     button_menu.onclick = function(event) {ClearScreenAndShowMenu()};
 
@@ -104,6 +122,15 @@ function Initialize()
     
     var button_Go= document.getElementById("gobutton");
     button_Go.onclick = function(event) {StartGame_BeatTheClock()};
+
+    var button_SavePlayer= document.getElementById("savePlayer");
+    button_SavePlayer.onclick = function(event) {SavePlayerFromForm()};
+
+    var button_CancelCreatePlayer= document.getElementById("cancelCreatePlayer");
+    button_CancelCreatePlayer.onclick = function(event) {ClearScreenAndShowMenu();};
+
+    var file_PlayerImage= document.getElementById("playerImage");
+    file_PlayerImage.onchange = function(event) {HandlePlayerImageSelection(event);};
     
     location.href='#modalMainMenu';
 }
@@ -136,6 +163,285 @@ function ClearScreenAndShowMenu()
     ShowMenu();
 }
 
+function GetDefaultPlayerImage()
+{
+    return "linear-gradient(135deg, rgba(124, 58, 237, 0.6), rgba(34, 211, 238, 0.6))";
+}
+
+function buildBackgroundImage(imageValue)
+{
+    if (!imageValue)
+    {
+        return GetDefaultPlayerImage();
+    }
+
+    if (imageValue.startsWith("linear-gradient"))
+    {
+        return imageValue;
+    }
+
+    return "url('" + imageValue + "')";
+}
+
+function LoadPlayers()
+{
+    var storedPlayers = localStorage.getItem(LocalStorageKey_Players);
+    var storedSelectedPlayer = localStorage.getItem(LocalStorageKey_SelectedPlayer);
+
+    if (storedPlayers!==null)
+    {
+        Players = JSON.parse(storedPlayers);
+    }
+
+    if (storedSelectedPlayer!==null)
+    {
+        SelectedPlayer = Players.find(p => p.id === storedSelectedPlayer) || null;
+    }
+
+    if (!SelectedPlayer && Players.length>0)
+    {
+        // auto select the first player to keep menu usable
+        SelectedPlayer = Players[0];
+        SaveSelectedPlayer();
+    }
+
+    UpdateSelectedPlayerUI();
+    UpdateMainMenuState();
+}
+
+function SavePlayers()
+{
+    localStorage.setItem(LocalStorageKey_Players, JSON.stringify(Players));
+}
+
+function SaveSelectedPlayer()
+{
+    if (SelectedPlayer)
+    {
+        localStorage.setItem(LocalStorageKey_SelectedPlayer, SelectedPlayer.id);
+    }
+    else
+    {
+        localStorage.removeItem(LocalStorageKey_SelectedPlayer);
+    }
+}
+
+function UpdateSelectedPlayerUI()
+{
+    var heroImage = document.getElementById("mainmenutopimage");
+    var selectedPlayerAvatar = document.getElementById("selectedPlayerAvatar");
+    var selectedPlayerName = document.getElementById("selectedPlayerName");
+    var gameCompletePic = document.getElementById("GameCompleteImage");
+    var gameCompleteProfile = document.getElementsByClassName("GameCompleteProfilePic")[0];
+
+    var imageValue = SelectedPlayer ? SelectedPlayer.image : null;
+    var playerName = SelectedPlayer ? SelectedPlayer.name : "No player selected";
+
+    if (heroImage)
+    {
+        heroImage.style.backgroundImage = "linear-gradient(120deg, rgba(124,58,237,0.6), rgba(34,211,238,0.6)), " + buildBackgroundImage(imageValue);
+    }
+
+    if (selectedPlayerAvatar)
+    {
+        selectedPlayerAvatar.style.backgroundImage = buildBackgroundImage(imageValue);
+    }
+
+    if (selectedPlayerName)
+    {
+        selectedPlayerName.innerHTML = playerName;
+    }
+
+    if (gameCompletePic)
+    {
+        gameCompletePic.style.backgroundImage = buildBackgroundImage(imageValue);
+    }
+
+    if (gameCompleteProfile)
+    {
+        gameCompleteProfile.style.backgroundImage = buildBackgroundImage(imageValue);
+    }
+}
+
+function UpdateMainMenuState()
+{
+    var hasSelectedPlayer = SelectedPlayer!=null;
+    var menu_practice = document.getElementById("practice")
+    var menu_beattheclock = document.getElementById("beattheclock")
+    var menu_rankings = document.getElementById("rankings")
+    var menu_clearRankings = document.getElementById("clearRankings");
+    var selectPlayerButton = document.getElementById("selectPlayer");
+
+    [menu_practice, menu_beattheclock, menu_rankings, menu_clearRankings].forEach(function(button){
+        if (button)
+        {
+            button.disabled=!hasSelectedPlayer;
+        }
+    });
+
+    if (selectPlayerButton)
+    {
+        if (Players.length>1)
+        {
+            selectPlayerButton.classList.remove("hidden");
+            selectPlayerButton.disabled=!hasSelectedPlayer;
+        }
+        else
+        {
+            selectPlayerButton.classList.add("hidden");
+        }
+    }
+}
+
+function OpenCreatePlayerModal()
+{
+    PendingPlayerImage=null;
+    var playerNameInput = document.getElementById("playerName");
+    var playerImageInput = document.getElementById("playerImage");
+    var preview = document.getElementById("playerPreview");
+
+    if (playerNameInput)
+    {
+        playerNameInput.value="";
+    }
+
+    if (playerImageInput)
+    {
+        playerImageInput.value="";
+    }
+
+    if (preview)
+    {
+        preview.style.backgroundImage = GetDefaultPlayerImage();
+    }
+
+    location.href="#modalCreatePlayer";
+}
+
+function HandlePlayerImageSelection(event)
+{
+    var file = event.target.files[0];
+    var preview = document.getElementById("playerPreview");
+
+    if (!file)
+    {
+        PendingPlayerImage=null;
+        if (preview)
+        {
+            preview.style.backgroundImage = GetDefaultPlayerImage();
+        }
+        return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        PendingPlayerImage = e.target.result;
+        if (preview)
+        {
+            preview.style.backgroundImage = buildBackgroundImage(PendingPlayerImage);
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+function SavePlayerFromForm()
+{
+    var playerNameInput = document.getElementById("playerName");
+    var name = playerNameInput.value.trim();
+
+    if (name.length===0)
+    {
+        alert("Please add a player name.");
+        return;
+    }
+
+    var newPlayer = {
+        id: "player_" + new Date().getTime().toString(),
+        name: name,
+        image: PendingPlayerImage
+    };
+
+    Players.push(newPlayer);
+    SelectedPlayer=newPlayer;
+    SavePlayers();
+    SaveSelectedPlayer();
+    UpdateSelectedPlayerUI();
+    UpdateMainMenuState();
+    ClearScreenAndShowMenu();
+}
+
+function ClearPlayers()
+{
+    Players=[];
+    SelectedPlayer=null;
+    PendingPlayerImage=null;
+    SavePlayers();
+    SaveSelectedPlayer();
+    UpdateSelectedPlayerUI();
+    UpdateMainMenuState();
+}
+
+function OpenSelectPlayerModal()
+{
+    renderPlayerList();
+    location.href="#modalSelectPlayer";
+}
+
+function renderPlayerList()
+{
+    var listContainer = document.getElementById("playerList");
+
+    if (!listContainer)
+    {
+        return;
+    }
+
+    while(listContainer.firstChild)
+    {
+        listContainer.removeChild(listContainer.firstChild);
+    }
+
+    if (Players.length===0)
+    {
+        var helper = document.createElement("p");
+        helper.setAttribute("class","helper-text");
+        helper.innerHTML="No players created yet. Add one to start playing.";
+        listContainer.appendChild(helper);
+        return;
+    }
+
+    Players.forEach(function(player){
+        var button = document.createElement("button");
+        button.setAttribute("class","player-select-card");
+        button.onclick = function(){SelectedPlayer = player; SaveSelectedPlayer(); UpdateSelectedPlayerUI(); UpdateMainMenuState(); ClearScreenAndShowMenu();};
+
+        var avatar = document.createElement("div");
+        avatar.setAttribute("class","selected-player__avatar small");
+        avatar.style.backgroundImage = buildBackgroundImage(player.image);
+
+        var name = document.createElement("div");
+        name.setAttribute("class","selected-player__name");
+        name.innerHTML=player.name;
+
+        button.appendChild(avatar);
+        button.appendChild(name);
+
+        listContainer.appendChild(button);
+    });
+}
+
+function ensurePlayerSelected()
+{
+    if (!SelectedPlayer)
+    {
+        alert("Please create and select a player to continue.");
+        ClearScreenAndShowMenu();
+        return false;
+    }
+
+    return true;
+}
+
 function LoadRankingsData(localStorageKey)
 {
     
@@ -144,7 +450,21 @@ function LoadRankingsData(localStorageKey)
     {
         return false;
     }
-    RankingList= JSON.parse(retrievedObject);
+    var parsedList = JSON.parse(retrievedObject);
+    if (!Array.isArray(parsedList))
+    {
+        RankingList=[];
+        return false;
+    }
+    RankingList= parsedList.map(function(item){
+        item.playerName = item.playerName || ((item.forename || "") + " " + (item.surname || "")).trim();
+        if (!item.playerName || item.playerName.trim().length===0)
+        {
+            item.playerName="Player";
+        }
+        item.playerImage = item.playerImage || null;
+        return item;
+    });
     return true;
 }
 
@@ -154,10 +474,31 @@ function SaveRankingsData(localStorageKey)
     localStorage.setItem(localStorageKey, JSON.stringify(RankingList));
 }
 
+function GetStoredObject(storageKey)
+{
+    var stored = localStorage.getItem(storageKey);
+    if (!stored)
+    {
+        return null;
+    }
+
+    try
+    {
+        return JSON.parse(stored);
+    }
+    catch
+    {
+        return null;
+    }
+}
+
 
 function ClearRankingsData(localStorageKey)
 {
     localStorage.removeItem(localStorageKey);    
+    localStorage.removeItem(LocalStorageKey_LastScore);
+    localStorage.removeItem(LocalStorageKey_LastRankedScore);
+    localStorage.removeItem(LocalStorageKey_WinningStreak);
     RankingList =[];
 }
 
@@ -200,12 +541,12 @@ function isRankedScore(RankingItem)
 
 function ProcessWinningStreak()
 {
-    var LastScore = localStorage.getItem(LocalStorageKey_LastScore);
-    var WinningStreak=localStorage.getItem(LocalStorageKey_WinningStreak);
+    var LastScore = GetStoredObject(LocalStorageKey_LastScore);
+    var WinningStreak=parseInt(localStorage.getItem(LocalStorageKey_WinningStreak));
 
-    if (WinningStreak==null){WinningStreak=0};
+    if (isNaN(WinningStreak)){WinningStreak=0};
 
-    if (LastScore!=null)
+    if (LastScore!=null && LastScore.Score!=null)
     {
 
         if (LastScore.Score<RankingItem.Score)
@@ -231,6 +572,10 @@ function ProcessWinningStreak()
 
 function ShowGameStart_BeatTheClock()
 {
+    if (!ensurePlayerSelected())
+    {
+        return;
+    }
     location.href='#close';
     FormatCellsInLine=false;
     generateMatrixTable(matrixRangeX,matrixRangeY,FormatCellsInLine,false); 
@@ -242,6 +587,10 @@ function ShowGameStart_BeatTheClock()
 
 function ShowGameRankings()
 {
+    if (!ensurePlayerSelected())
+    {
+        return;
+    }
     location.href='#close';
     
     UpdateRankingUI();
@@ -340,10 +689,14 @@ function CalculateGameScorePercent()
 function GetRankingItem()
 {  
     // create the Ranking Object
-    var RankingItem = new Object();1
-    RankingItem.forename= "lucy";
-    RankingItem.surname="mantle";
-    RankingItem.scoreDate=new Date();
+    var RankingItem = new Object();
+    var playerName = SelectedPlayer ? SelectedPlayer.name : "Player";
+    var playerImage = SelectedPlayer ? SelectedPlayer.image : null;
+
+    RankingItem.playerName= playerName;
+    RankingItem.playerId = SelectedPlayer ? SelectedPlayer.id : null;
+    RankingItem.playerImage = playerImage;
+    RankingItem.scoreDate=new Date().toISOString();
     RankingItem.MaxScore=cellsCorrect+cellsInCorrect;
     RankingItem.Score=cellsCorrect;
     RankingItem.TimeTaken=TimeTaken;
@@ -359,6 +712,31 @@ function ClearRankings()
 {
     ClearRankingsData(LocalStorageKey_Rankings);
     UpdateRankingUI();
+}
+
+function getRankingDisplayName(rankingItem)
+{
+    if (!rankingItem)
+    {
+        return "Player";
+    }
+
+    if (rankingItem.playerName)
+    {
+        return rankingItem.playerName;
+    }
+
+    var legacyName = ((rankingItem.forename || "") + " " + (rankingItem.surname || "")).trim();
+    return legacyName.length>0 ? legacyName : "Player";
+}
+
+function getRankingImageValue(rankingItem)
+{
+    if (rankingItem && rankingItem.playerImage)
+    {
+        return rankingItem.playerImage;
+    }
+    return null;
 }
 
 function UpdateRankingUI()
@@ -420,9 +798,15 @@ function UpdateRankingUI()
             // get and set the values for item UI
             var _divRankingItem_name = document.getElementById("item" + (i+1) + "_name");
             var _divRankingItem_score = document.getElementById("item" + (i+1) + "_score");
-    
-            _divRankingItem_name.innerHTML=RankingList[i].forename + " " + RankingList[i].surname;
+            var _divRankingItem_pic = document.getElementById("item" + (i+1) + "_pic");
+
+            _divRankingItem_name.innerHTML=getRankingDisplayName(RankingList[i]);
             _divRankingItem_score.innerHTML=roundedToFixed((RankingList[i].Score/RankingList[i].MaxScore)*100,1) + "% in " + FormatTimeTaken(RankingList[i].TimeTaken);
+
+            if (_divRankingItem_pic)
+            {
+                _divRankingItem_pic.style.backgroundImage = buildBackgroundImage(getRankingImageValue(RankingList[i]));
+            }
 
             // if this is the last ranked item set the back colour to highight
             if (LastRankedItem!=null)
@@ -512,6 +896,7 @@ function UpdateGameCompleteUI()
     var GameCompleteRankingSubHeader=document.getElementById("GameComplete_SubHeader2");
     var GameCompleteTipsSubHeader=document.getElementById("GameComplete_SubHeader3");
     var GameCompletedHeader=document.getElementById("GameComplete_Header");
+    var playerLabel = SelectedPlayer ? SelectedPlayer.name : "Player";
 
     GameScorePercentDiv.innerHTML="You scored <strong>" + roundedToFixed(GameScorePercent,1) + " %</strong> in <strong>" + FormatTimeTaken(TimeTaken) + "</strong>";
     GameCompleteTipsSubHeader.innerHTML="";
@@ -519,11 +904,12 @@ function UpdateGameCompleteUI()
 
     if (RankedScore)
     {
-        GameCompletedHeader.innerHTML="NICE JOB. YOU RANKED!!&nbsp;&nbsp;&nbsp;";  
+        GameCompletedHeader.innerHTML="NICE JOB, " + playerLabel.toUpperCase() + ". YOU RANKED!!&nbsp;&nbsp;&nbsp;";  
         GameCompleteRankingSubHeader.innerHTML= "Check the leaderboard to see where you placed.";  
     }
     else
     {
+        GameCompletedHeader.innerHTML="KEEP GOING, " + playerLabel.toUpperCase() + "!";
         GameCompleteRankingSubHeader.innerHTML="Unlucky. You didnt get on the leaderboard this time...";  
     }
 }
@@ -531,6 +917,10 @@ function UpdateGameCompleteUI()
 
 function StartGame_BeatTheClock()
 {
+    if (!ensurePlayerSelected())
+    {
+        return;
+    }
     var div_Timer= document.getElementById("TimeSet");
     TimerLengthText=div_Timer.innerHTML;
     TimerLength=(parseFloat(TimerLengthText.replace(':','.'))*60);
@@ -573,6 +963,10 @@ function StartGame_BeatTheClock()
 
 function StartGame_PracticeMode()
 {
+    if (!ensurePlayerSelected())
+    {
+        return;
+    }
     location.href='#close';
     FormatCellsInLine=true;
     generateMatrixTable(matrixRangeX,matrixRangeY,FormatCellsInLine,false); 
