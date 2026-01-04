@@ -826,6 +826,9 @@ th, td {
   display: flex;
   align-items: center;
   gap: 12px;
+  justify-content: flex-end;
+  align-self: flex-end;
+  margin-top: auto;
 }
 
 .player-list {
