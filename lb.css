@@ -79,6 +79,7 @@
   border-radius: 50%;
   background-size: cover;
   background-position: center;
+  background-image: linear-gradient(135deg, rgba(124, 58, 237, 0.6), rgba(34, 211, 238, 0.6));
   margin-right: 1rem;
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3);
 }
@@ -94,6 +95,15 @@
   background-position: center;
   margin-right: 1rem;
   /* box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3); */
+}
+
+.bronze-trophy {
+  background-image: url("trophy_bronze.svg");
+  width: 6rem;
+  height: 6rem;
+  top: -2.5rem;
+  left: 9rem;
+  opacity: 0.92;
 }
 
 .top3 .item .top3_pos 
@@ -176,6 +186,7 @@
   border-radius: 50%;
   background-size: cover;
   background-position: center;
+  background-image: linear-gradient(135deg, rgba(124, 58, 237, 0.6), rgba(34, 211, 238, 0.6));
   margin-right: 1rem;
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3);
   z-index:100;
