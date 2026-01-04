@@ -49,31 +49,34 @@
 .top3 {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  gap: 12px;
+  align-items: flex-start;
+  gap: 16px;
   flex-wrap: wrap;
+  width: 100%;
   
 }
 .top3 .item {
   box-sizing: border-box;
   position: relative;
   background: rgba(255,255,255,0.04);
-  width: 15rem;
-  height: 10rem;
+  width: 16rem;
+  height: 12rem;
   text-align: center;
-  margin: 1rem 1rem 2rem;
+  margin: 1rem 0.75rem 2rem;
   border-radius: 0.5rem;
   transform-origin: bottom;
   cursor: pointer;
   transition: transform 200ms ease-in-out;
   box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.25), 0 1rem 2rem -1rem rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255,255,255,0.12);
+  padding: 1.25rem;
+  padding-top: 5rem;
 }
 
 .top3 .item .top3_pic {
   position: absolute;
-  top: -2rem;
-  left: 0.5rem;
+  top: 0.75rem;
+  left: 0.75rem;
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
@@ -87,14 +90,14 @@
 .top3_pic2
 {
   position: absolute;
-  top: -4rem;
-  left: 12rem;
-  width: 9rem;
-  height: 10rem;
-  background-size: cover;
+  top: 0.75rem;
+  right: 0.75rem;
+  left: auto;
+  width: 4rem;
+  height: 4rem;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
-  margin-right: 1rem;
-  /* box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3); */
 }
 
 .top3_pic2.gold {
@@ -102,24 +105,30 @@
 }
 
 .top3_pic2.silver {
-  width: 7rem;
-  height: 8rem;
-  left: 9rem;
   filter: drop-shadow(0 8px 18px rgba(148, 163, 184, 0.5));
+}
+
+.top3_pic2.bronze {
+  filter: drop-shadow(0 8px 18px rgba(248, 180, 0, 0.35));
 }
 
 .top3 .item .top3_pos 
 {
+  position: absolute;
+  top: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
   font-weight: 900;
   font-size: 2.5rem;
-  margin-bottom: 0.4rem;
   background: linear-gradient(135deg, rgba(124, 58, 237, 0.9), rgba(34, 211, 238, 0.9));
   color:#0b1221;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
 }
 
 .top3 .item .top3_name {
   font-size: 2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
   font-family:"shadows into light";
   color: #e2e8f0;
 }
@@ -131,20 +140,17 @@
 
 .top3 .item.one {
   width: 20rem;
-  height: 15rem;
+  height: 14rem;
 }
 
 .top3 .item.one .top3_pic {
   width: 7rem;
   height: 7rem;
-  left: 0.5rem;
+  left: 1rem;
 }
 
 .top3 .item.one .top3_pos {
-  margin-bottom: 1.5rem;
-  text-align: center;
-  padding-top:1rem;
-  height:5rem;
+  padding: 0.35rem 1rem;
 }
 
 .top3 .item:hover {
