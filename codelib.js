@@ -22,6 +22,7 @@ let cellsCorrect=0;
 let cellsInCorrect=0;
 let RankedScore=false;
 let RankingItem;
+let GameStoppedByUser=false;
 
 settings = {
     maxLen: 3, 
@@ -130,7 +131,7 @@ function Initialize()
     button_shuffle.onclick = function(event) {ShuffleMatrix()};
 
     var button_stop= document.getElementById("StopButton");
-    button_stop.onclick = function(event) {GameCancelled=true;};
+    button_stop.onclick = function(event) {GameCancelled=true; GameStoppedByUser=true;};
     
     var button_Go= document.getElementById("gobutton");
     button_Go.onclick = function(event) {StartGame_BeatTheClock()};
@@ -720,6 +721,8 @@ function ShowStatusControls(GameStatus)
 function CalculateGameScorePercent()
 {
     var table = document.getElementById("MatrixTable");
+    cellsCorrect=0;
+    cellsInCorrect=0;
     
     for (var i = 0, row; row = table.rows[i]; i++) {
         //iterate through rows
@@ -746,7 +749,8 @@ function CalculateGameScorePercent()
         }  
     }
 
-    GameScorePercent=(cellsCorrect/(cellsCorrect+cellsInCorrect))*100;
+    var attemptedCells = cellsCorrect+cellsInCorrect;
+    GameScorePercent=attemptedCells>0 ? (cellsCorrect/attemptedCells)*100 : 0;
 }
 
 
@@ -945,6 +949,14 @@ function ProcessRankings()
 function ShowGameStatusStatus_BeatTheClock()
 {
     CalculateGameScorePercent();
+
+    if (GameStoppedByUser && GameScorePercent===0)
+    {
+        RankedScore=false;
+        GameStoppedByUser=false;
+        ClearScreenAndShowMenu();
+        return;
+    }
     ProcessRankings();
     ProcessWinningStreak();
     SaveRankingsData(LocalStorageKey_Rankings);
@@ -991,6 +1003,7 @@ function StartGame_BeatTheClock()
     
     location.href='#close'; 
     GameCancelled=false;
+    GameStoppedByUser=false;
 
     // Set the date we're counting down to
     var countDownDate = new Date();
