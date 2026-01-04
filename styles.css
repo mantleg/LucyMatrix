@@ -196,6 +196,7 @@ body {
     overflow: hidden;
     background: rgba(255,255,255,0.02);
     color: var(--matrix-td-font);
+    table-layout: fixed;
   }
 
 th, td {
@@ -230,6 +231,11 @@ th, td {
     padding: 8px;
     font-family: 'Inter', Arial, Helvetica, sans-serif;
     background-color:rgb(var(--matrix-td-color1));
+    width: calc(3ch + 16px);
+    min-width: calc(3ch + 16px);
+    max-width: calc(3ch + 16px);
+    white-space: nowrap;
+    overflow: hidden;
     
   }
 
@@ -240,6 +246,11 @@ th, td {
     padding: 8px;
     font-family: 'Inter', Arial, Helvetica, sans-serif;
     background-color:rgb(var(--matrix-td-color2));
+    width: calc(3ch + 16px);
+    min-width: calc(3ch + 16px);
+    max-width: calc(3ch + 16px);
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .MatrixTable td:focus {
@@ -311,6 +322,13 @@ th, td {
   display: grid;
   place-items: center;
   box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+.ExitButton:before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  background: url("button-stop.png") center/contain no-repeat;
+  opacity: 0.9;
 }
 .ExitButton:after {
   content:"✕";
