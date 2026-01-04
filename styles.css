@@ -485,16 +485,14 @@ th, td {
 .gobutton
    {
      background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.35), rgba(255,255,255,0)),
-                 linear-gradient(135deg, rgba(124, 58, 237, 0.95), rgba(34, 211, 238, 0.9));
+                 linear-gradient(135deg, #22c55e, #16a34a);
      width: clamp(160px, 24vw, 200px);
      height: clamp(160px, 24vw, 200px);
-     line-height: clamp(160px, 24vw, 200px);
      margin-left: auto;
      margin-right: auto;
      margin-top: 32px;
      margin-bottom: 32px;
      z-index: 10;
-     text-align:center;
      font-size:clamp(36px, 5vw, 60px);
      color:#0b1221;
      font-family:'Inter', sans-serif;
@@ -504,11 +502,20 @@ th, td {
      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
      border: 1px solid rgba(255,255,255,0.24);
      transition: transform 0.18s ease, box-shadow 0.18s ease;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     text-align:center;
    }
    
    .gobutton:hover {
      transform: translateY(-4px) scale(1.02);
      box-shadow: 0 26px 60px rgba(0,0,0,0.45);
+   }
+
+   .gobutton p {
+     margin: 0;
+     line-height: 1;
    }
 
 .matrixfooter {
