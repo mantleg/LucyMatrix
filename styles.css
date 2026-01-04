@@ -336,19 +336,8 @@ th, td {
   content: "";
   position: absolute;
   inset: 8px;
-  background: url("button-stop.png") center/contain no-repeat;
+  background: url("close-icon.svg") center/contain no-repeat;
   opacity: 0.9;
-}
-.ExitButton:after {
-  content:"✕";
-  display:block;
-  height:100%;
-  width:100%;
-  color:#0f172a;
-  font-weight:700;
-  font-size:16px;
-  text-align:center;
-  line-height: 38px;
 }
 
 .ExitButton:hover {
