@@ -1040,6 +1040,7 @@ function shuffle(array) {
 function generateMatrixTable(rangeX,rangeY,formatCellAnswers,randomSequence) 
 {
     var table = document.querySelector("table");
+    var rowNumber = 0;
 
     FormatCellsInLine=formatCellAnswers;
 
@@ -1063,8 +1064,6 @@ function generateMatrixTable(rangeX,rangeY,formatCellAnswers,randomSequence)
 
     var thead = table.createTHead();
     var row = thead.insertRow();
-    var offset=0;
-
     var th = document.createElement("th");
     row.appendChild(th);
     th.setAttribute('class','row-header')
@@ -1088,22 +1087,20 @@ function generateMatrixTable(rangeX,rangeY,formatCellAnswers,randomSequence)
         th.appendChild(text);
         row.appendChild(th);
 
-        if (offset==0) {
-            {offset=1};
-        }   
-        else if (offset==1){
-            {offset=0}
-        }
+        var rowOffset = rowNumber % 2;
+        rowNumber++;
 
+        var columnPosition = 0;
         for (var key2 of rangeX) 
         {
             colIndex=key2
             var td = document.createElement("td");
 
-            if (key2%2==offset)
-                td.setAttribute('class','editable-cell1')
-            else
-                td.setAttribute('class','editable-cell2')
+            if ((columnPosition + rowOffset) % 2 === 0) {
+                td.setAttribute('class','editable-cell1');
+            } else {
+                td.setAttribute('class','editable-cell2');
+            }
 
             td.setAttribute('id', rowIndex + '-' + colIndex);
             td.setAttribute('contenteditable','true')
@@ -1111,6 +1108,7 @@ function generateMatrixTable(rangeX,rangeY,formatCellAnswers,randomSequence)
             td.setAttribute('maxlength','3')
             td.onkeydown = function(event) { CellKeyDown(event);}
             row.appendChild(td);
+            columnPosition++;
         }
     }
 }

@@ -97,13 +97,15 @@
   /* box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3); */
 }
 
-.bronze-trophy {
-  background-image: url("trophy_bronze.svg");
-  width: 6rem;
-  height: 6rem;
-  top: -2.5rem;
+.top3_pic2.gold {
+  filter: drop-shadow(0 8px 18px rgba(124, 58, 237, 0.45));
+}
+
+.top3_pic2.silver {
+  width: 7rem;
+  height: 8rem;
   left: 9rem;
-  opacity: 0.92;
+  filter: drop-shadow(0 8px 18px rgba(148, 163, 184, 0.5));
 }
 
 .top3 .item .top3_pos 
@@ -119,10 +121,12 @@
   font-size: 2rem;
   margin-bottom: 0.5rem;
   font-family:"shadows into light";
+  color: #e2e8f0;
 }
 
 .top3 .item .top3_score {
   opacity: 0.7;
+  color: #e2e8f0;
 }
 
 .top3 .item.one {
@@ -197,10 +201,12 @@
   flex-basis: 10rem;
   font-size: 1.7rem;
   font-family:"shadows into light";
+  color: #e2e8f0;
 }
 .list .item .list_score {
   margin-right: 1.5rem;
   opacity: 0.7;
+  color: #e2e8f0;
 }
 /* .list .item .score:after {
   margin-right: 1rem;

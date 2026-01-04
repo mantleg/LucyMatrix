@@ -136,6 +136,16 @@ body {
 	pointer-events: auto;
 }
 
+.modalMainMenu:target .ExitButton {
+  display: none;
+}
+
+.modalMainMenu:target ~ #GameScreen {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .modal-card {
 	width: min(640px, 95vw);
 	position: relative;
