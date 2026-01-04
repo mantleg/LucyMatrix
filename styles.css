@@ -789,19 +789,30 @@ th, td {
 }
 
 .player-card {
-  gap: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-auto-rows: auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.player-card .menu-card__header {
+  grid-column: 1 / -1;
 }
 
 .player-form {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  grid-column: 1 / -1;
 }
 
 .player-form__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  align-items: center;
+  grid-column: 1;
 }
 
 .text-input, .file-input {
@@ -823,12 +834,13 @@ th, td {
 }
 
 .player-preview {
+  grid-column: 2;
   display: flex;
   align-items: center;
   gap: 12px;
   justify-content: flex-end;
-  align-self: flex-end;
-  margin-top: auto;
+  align-self: center;
+  margin-top: 0;
 }
 
 .player-list {
