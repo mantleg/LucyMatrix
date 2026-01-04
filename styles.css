@@ -802,6 +802,7 @@ th, td {
   gap: 10px;
   align-items: center;
   grid-column: 1;
+  margin-top: 12px;
 }
 
 .text-input, .file-input {
@@ -829,7 +830,7 @@ th, td {
   gap: 12px;
   justify-content: flex-end;
   align-self: center;
-  margin-top: 0;
+  margin-top: 12px;
 }
 
 .player-list {
