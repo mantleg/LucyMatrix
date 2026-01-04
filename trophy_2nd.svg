@@ -1,0 +1,31 @@
+<svg width="210" height="250" viewBox="0 0 210 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="silverBody" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="50%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="silverAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="silverBase" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="rgba(15,23,42,0.25)" />
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M70 30h70l-8 60c-3 22-19 40-35 40s-32-18-35-40l-8-60z" fill="url(#silverBody)" stroke="#e2e8f0" stroke-width="4" />
+    <path d="M142 50c0 22-18 40-40 40s-40-18-40-40" stroke="url(#silverAccent)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M54 56H26c-6 0-10 5-9 11 4 29 21 43 50 45" stroke="url(#silverAccent)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M156 56h28c6 0 10 5 9 11-4 29-21 43-50 45" stroke="url(#silverAccent)" stroke-width="10" stroke-linecap="round"/>
+    <rect x="82" y="130" width="46" height="20" rx="8" fill="url(#silverBase)" stroke="#cbd5e1" stroke-width="4"/>
+    <rect x="72" y="150" width="66" height="20" rx="10" fill="url(#silverBase)" stroke="#cbd5e1" stroke-width="4"/>
+    <rect x="62" y="170" width="86" height="22" rx="12" fill="url(#silverBase)" stroke="#cbd5e1" stroke-width="4"/>
+    <path d="M54 192h102c-4 16-24 26-50 26s-46-10-52-26z" fill="url(#silverBody)" stroke="#cbd5e1" stroke-width="4"/>
+    <path d="M72 88l16-6 10 16 10-16 16 6-10-16 10-16-16 6-10-16-10 16-16-6 10 16-10 16z" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="3"/>
+  </g>
+</svg>
