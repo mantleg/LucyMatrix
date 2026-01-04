@@ -113,6 +113,22 @@ function ShowMenu()
     location.href='#modalMainMenu';
 }
 
+function setTimerVisibility(showTimer)
+{
+    var timerMeter = document.getElementById("timerMeter");
+    var progress = document.getElementById("progress");
+
+    if (timerMeter)
+    {
+        timerMeter.style.display = showTimer ? "block" : "none";
+    }
+
+    if (progress)
+    {
+        progress.style.width = showTimer ? "100%" : "0%";
+    }
+}
+
 function ClearScreenAndShowMenu()
 {
     location.href='#close';
@@ -571,6 +587,7 @@ function showGameControls(BeatTheClockMode,CompletedGame)
     button_menu= document.getElementById("MenuButton");
     button_stop= document.getElementById("StopButton");
     button_shuffle= document.getElementById("ShuffleButton");
+    setTimerVisibility(BeatTheClockMode);
 
     tableMatrix.style.visibility="visible"
     divFooter.style.visibility="visible"
@@ -828,4 +845,3 @@ function formatCell(e1)
 
     }
 }
-
