@@ -102,14 +102,20 @@ function Initialize()
     var menu_clearRankings = document.getElementById("clearRankings")
     menu_clearRankings.onclick = function(event) {ClearRankings()};
 
-    var menu_createPlayer = document.getElementById("createPlayer")
-    menu_createPlayer.onclick = function(event) {OpenCreatePlayerModal()};
-
     var menu_clearPlayers = document.getElementById("clearPlayers")
     menu_clearPlayers.onclick = function(event) {ClearPlayers()};
 
-    var menu_selectPlayer = document.getElementById("selectPlayer")
-    menu_selectPlayer.onclick = function(event) {OpenSelectPlayerModal()};
+    var button_selectedCreatePlayer = document.getElementById("selectedCreatePlayer");
+    if (button_selectedCreatePlayer)
+    {
+        button_selectedCreatePlayer.onclick = function(event) {OpenCreatePlayerModal();};
+    }
+
+    var button_selectedChangePlayer = document.getElementById("selectedChangePlayer");
+    if (button_selectedChangePlayer)
+    {
+        button_selectedChangePlayer.onclick = function(event) {OpenSelectPlayerModal();};
+    }
 
     var button_menu= document.getElementById("MenuButton");
     button_menu.onclick = function(event) {ClearScreenAndShowMenu()};
@@ -270,7 +276,7 @@ function UpdateMainMenuState()
     var menu_beattheclock = document.getElementById("beattheclock")
     var menu_rankings = document.getElementById("rankings")
     var menu_clearRankings = document.getElementById("clearRankings");
-    var selectPlayerButton = document.getElementById("selectPlayer");
+    var changePlayerButton = document.getElementById("selectedChangePlayer");
 
     [menu_practice, menu_beattheclock, menu_rankings, menu_clearRankings].forEach(function(button){
         if (button)
@@ -279,17 +285,9 @@ function UpdateMainMenuState()
         }
     });
 
-    if (selectPlayerButton)
+    if (changePlayerButton)
     {
-        if (Players.length>1)
-        {
-            selectPlayerButton.classList.remove("hidden");
-            selectPlayerButton.disabled=!hasSelectedPlayer;
-        }
-        else
-        {
-            selectPlayerButton.classList.add("hidden");
-        }
+        changePlayerButton.disabled = !hasSelectedPlayer || Players.length<=1;
     }
 }
 
@@ -381,8 +379,45 @@ function ClearPlayers()
     UpdateMainMenuState();
 }
 
+function DeletePlayer(playerId)
+{
+    var index = Players.findIndex(function(p){return p.id===playerId;});
+
+    if (index===-1)
+    {
+        return;
+    }
+
+    var deletingSelectedPlayer = SelectedPlayer && SelectedPlayer.id===playerId;
+    Players.splice(index,1);
+
+    if (deletingSelectedPlayer)
+    {
+        SelectedPlayer = Players.length>0 ? Players[0] : null;
+    }
+
+    SavePlayers();
+    SaveSelectedPlayer();
+    UpdateSelectedPlayerUI();
+    UpdateMainMenuState();
+    
+    if (Players.length<=1)
+    {
+        ClearScreenAndShowMenu();
+    }
+    else
+    {
+        renderPlayerList();
+    }
+}
+
 function OpenSelectPlayerModal()
 {
+    if (Players.length<=1)
+    {
+        return;
+    }
+
     renderPlayerList();
     location.href="#modalSelectPlayer";
 }
@@ -413,7 +448,11 @@ function renderPlayerList()
     Players.forEach(function(player){
         var button = document.createElement("button");
         button.setAttribute("class","player-select-card");
+        button.setAttribute("type","button");
         button.onclick = function(){SelectedPlayer = player; SaveSelectedPlayer(); UpdateSelectedPlayerUI(); UpdateMainMenuState(); ClearScreenAndShowMenu();};
+
+        var content = document.createElement("div");
+        content.setAttribute("class","player-select-card__content");
 
         var avatar = document.createElement("div");
         avatar.setAttribute("class","selected-player__avatar small");
@@ -423,8 +462,21 @@ function renderPlayerList()
         name.setAttribute("class","selected-player__name");
         name.innerHTML=player.name;
 
-        button.appendChild(avatar);
-        button.appendChild(name);
+        content.appendChild(avatar);
+        content.appendChild(name);
+        button.appendChild(content);
+
+        var deleteButton = document.createElement("button");
+        deleteButton.setAttribute("class","player-delete-button");
+        deleteButton.setAttribute("type","button");
+        deleteButton.setAttribute("aria-label","Delete player");
+        deleteButton.innerHTML="✕";
+        deleteButton.onclick = function(event){
+            event.stopPropagation();
+            DeletePlayer(player.id);
+        };
+
+        button.appendChild(deleteButton);
 
         listContainer.appendChild(button);
     });
