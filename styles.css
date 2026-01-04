@@ -689,6 +689,13 @@ th, td {
   background: rgba(255,255,255,0.03);
 }
 
+.selected-player__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 .selected-player__avatar {
   width: 72px;
   height: 72px;
@@ -723,6 +730,41 @@ th, td {
 
 .hidden {
   display: none !important;
+}
+
+.chip-button {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.chip-button span {
+  position: relative;
+  top: 1px;
+}
+
+.chip-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+}
+
+.chip-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.chip-button.ghost {
+  background: transparent;
+  color: var(--muted);
 }
 
 .player-card {
@@ -774,6 +816,7 @@ th, td {
 .player-select-card {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   padding: 12px;
   border-radius: 14px;
@@ -787,6 +830,30 @@ th, td {
 .player-select-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+}
+
+.player-select-card__content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-delete-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.player-delete-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+  background: rgba(255,255,255,0.12);
 }
 
 .helper-text.small {
