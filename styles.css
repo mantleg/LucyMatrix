@@ -681,7 +681,7 @@ th, td {
 
 .selected-player {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
   padding: 10px 12px;
@@ -692,10 +692,13 @@ th, td {
 
 .selected-player__actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
-  margin-top: 8px;
-  align-items: flex-end;
+  align-items: center;
+  justify-self: end;
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: center;
 }
 
 .selected-player__avatar {
@@ -710,6 +713,11 @@ th, td {
 
 .selected-player__details {
   flex: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 12px;
+  row-gap: 4px;
+  align-items: center;
 }
 
 .selected-player__avatar.small {
