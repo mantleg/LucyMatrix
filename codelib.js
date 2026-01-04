@@ -100,10 +100,16 @@ function Initialize()
     menu_rankings.onclick = function(event) {ShowGameRankings()};
 
     var menu_clearRankings = document.getElementById("clearRankings")
-    menu_clearRankings.onclick = function(event) {ClearRankings()};
+    if (menu_clearRankings)
+    {
+        menu_clearRankings.onclick = function(event) {ClearRankings()};
+    }
 
     var menu_clearPlayers = document.getElementById("clearPlayers")
-    menu_clearPlayers.onclick = function(event) {ClearPlayers()};
+    if (menu_clearPlayers)
+    {
+        menu_clearPlayers.onclick = function(event) {ClearPlayers()};
+    }
 
     var button_selectedCreatePlayer = document.getElementById("selectedCreatePlayer");
     if (button_selectedCreatePlayer)
@@ -381,13 +387,19 @@ function ClearPlayers()
 
 function DeletePlayer(playerId)
 {
-    var index = Players.findIndex(function(p){return p.id===playerId;});
+    var playerToDelete = Players.find(function(p){return p.id===playerId;});
 
-    if (index===-1)
+    if (!playerToDelete)
     {
         return;
     }
 
+    if (!confirm("Are you sure you want to delete \"" + playerToDelete.name + "\"?"))
+    {
+        return;
+    }
+
+    var index = Players.findIndex(function(p){return p.id===playerId;});
     var deletingSelectedPlayer = SelectedPlayer && SelectedPlayer.id===playerId;
     Players.splice(index,1);
 
