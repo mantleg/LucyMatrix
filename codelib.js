@@ -23,6 +23,9 @@ let cellsInCorrect=0;
 let RankedScore=false;
 let RankingItem;
 let GameStoppedByUser=false;
+let BeatTheClockTimerId=null;
+let BeatTheClockStartedAt=null;
+let BeatTheClockFinishing=false;
 
 settings = {
     maxLen: 3, 
@@ -131,10 +134,16 @@ function Initialize()
     button_shuffle.onclick = function(event) {ShuffleMatrix()};
 
     var button_stop= document.getElementById("StopButton");
-    button_stop.onclick = function(event) {GameCancelled=true; GameStoppedByUser=true;};
+    button_stop.onclick = function(event) {StopGame_BeatTheClock();};
     
     var button_Go= document.getElementById("gobutton");
     button_Go.onclick = function(event) {StartGame_BeatTheClock()};
+
+    var button_continue= document.getElementById("continueGameButton");
+    if (button_continue)
+    {
+        button_continue.onclick = function(event) {ClearScreenAndShowMenu();};
+    }
 
     var button_SavePlayer= document.getElementById("savePlayer");
     button_SavePlayer.onclick = function(event) {SavePlayerFromForm()};
@@ -958,12 +967,24 @@ function ShowGameStatusStatus_BeatTheClock()
         return;
     }
     ProcessRankings();
-    ProcessWinningStreak();
-    SaveRankingsData(LocalStorageKey_Rankings);
     UpdateGameCompleteUI();
     showGameControls(false,true);
     ShowStatusControls(true);
     location.href='#modalGameMenu';
+
+    // Saving a score is useful, but it must never prevent the player from
+    // leaving the completed game (for example when localStorage is full).
+    try
+    {
+        ProcessWinningStreak();
+        SaveRankingsData(LocalStorageKey_Rankings);
+    }
+    catch (error)
+    {
+        console.warn("The completed score could not be saved.", error);
+    }
+
+    GameStoppedByUser=false;
 }
 
 function UpdateGameCompleteUI()
@@ -1004,13 +1025,20 @@ function StartGame_BeatTheClock()
     location.href='#close'; 
     GameCancelled=false;
     GameStoppedByUser=false;
+    BeatTheClockFinishing=false;
+
+    if (BeatTheClockTimerId!==null)
+    {
+        clearInterval(BeatTheClockTimerId);
+    }
 
     // Set the date we're counting down to
     var countDownDate = new Date();
     countDownDate.setSeconds( countDownDate.getSeconds() + TimerLength);
+    BeatTheClockStartedAt=Date.now();
 
     // Update the count down every 1 second
-    var x = setInterval(function() {
+    BeatTheClockTimerId = setInterval(function() {
 
         // Get today's date and time
         var now = new Date().getTime();
@@ -1029,13 +1057,46 @@ function StartGame_BeatTheClock()
 
 
         // If the count down is finished, write some text
-        if (distanceSecs< 0 || GameCancelled) {
-            clearInterval(x);
-            TimeTaken=TimerLength-distanceSecs;
-            ShowGameStatusStatus_BeatTheClock();
+        if (distanceSecs< 0) {
+            CompleteGame_BeatTheClock(false);
         }
         }, 1000);
     
+}
+
+function StopGame_BeatTheClock()
+{
+    if (BeatTheClockTimerId===null || BeatTheClockFinishing)
+    {
+        return;
+    }
+
+    GameCancelled=true;
+    CompleteGame_BeatTheClock(true);
+}
+
+function CompleteGame_BeatTheClock(stoppedByUser)
+{
+    if (BeatTheClockFinishing)
+    {
+        return;
+    }
+
+    BeatTheClockFinishing=true;
+    GameStoppedByUser=stoppedByUser;
+
+    if (BeatTheClockTimerId!==null)
+    {
+        clearInterval(BeatTheClockTimerId);
+        BeatTheClockTimerId=null;
+    }
+
+    if (BeatTheClockStartedAt!==null)
+    {
+        TimeTaken=Math.min(TimerLength, Math.max(0, (Date.now()-BeatTheClockStartedAt)/1000));
+    }
+
+    ShowGameStatusStatus_BeatTheClock();
 }
 
 function StartGame_PracticeMode()
