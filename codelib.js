@@ -1066,8 +1066,13 @@ function StartGame_BeatTheClock()
 
 function StopGame_BeatTheClock()
 {
-    if (BeatTheClockTimerId===null || BeatTheClockFinishing)
+    if (BeatTheClockFinishing)
     {
+        // Recover the completed-game controls if the UI was left behind while
+        // the round was already being finalized.
+        showGameControls(false,true);
+        ShowStatusControls(true);
+        location.href='#modalGameMenu';
         return;
     }
 
